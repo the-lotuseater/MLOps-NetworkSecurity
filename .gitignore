@@ -1,0 +1,10 @@
+**/.venv/*
+*/mlartifacts/*
+**/mlruns/**
+**/models/**
+*/artifacts/*
+*/*.pkl
+**/venv/**
+**/__pycache__/**
+**/logs/**
+**/logs/**
