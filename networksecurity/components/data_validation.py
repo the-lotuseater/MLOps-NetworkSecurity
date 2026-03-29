@@ -83,24 +83,24 @@ class DataValidation:
             
             ##lets check data drift
             status = self.detect_data_drift(base_df=train_df,current_df=test_df)
-            if status:
-                dir_path = os.path.dirname(self.data_validation_config.valid_train_file_path)
-                os.makedirs(dir_path,exist_ok=True)
-                train_df.to_csv(
-                    self.data_validation_config.valid_train_file_path,index=False,header=True
-                )
-                test_df.to_csv(
-                    self.data_validation_config.valid_test_file_path,index=False,header=True
-                )
+            dir_path = os.path.dirname(self.data_validation_config.valid_train_file_path)
+            os.makedirs(dir_path,exist_ok=True)
+            train_df.to_csv(
+                self.data_validation_config.valid_train_file_path,index=False,header=True
+            )
+            test_df.to_csv(
+                self.data_validation_config.valid_test_file_path,index=False,header=True
+            )
 
-                data_validation_artifact = DataValidationArtifact(
-                    validation_status=status,
-                    valid_train_file_path=self.data_ingestion_artifact.trained_file_path,
-                    valid_test_file_path=self.data_ingestion_artifact.test_file_path,
-                    invalid_train_file_path=None,
-                    invalid_test_file_path=None,
-                    drift_report_file_path=self.data_validation_config.drift_report_file_path
-                )
-                logging.info(f'Data Validation artifact created: {data_validation_artifact}')
+            data_validation_artifact = DataValidationArtifact(
+                validation_status=status,
+                valid_train_file_path=self.data_ingestion_artifact.trained_file_path,
+                valid_test_file_path=self.data_ingestion_artifact.test_file_path,
+                invalid_train_file_path=None,
+                invalid_test_file_path=None,
+                drift_report_file_path=self.data_validation_config.drift_report_file_path
+            )
+            logging.info(f'Data Validation artifact created: {data_validation_artifact}')
+            return data_validation_artifact
         except Exception as e:
             raise NetworkSecurityException(e, sys)

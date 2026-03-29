@@ -25,7 +25,6 @@ class DataIngestion:
 
     def export_collection_as_dataframe(self):
         '''
-        Docstring for export_collection_as_dataframe
         Used to read data from mongo DB
         
         :param self: Description
@@ -43,6 +42,11 @@ class DataIngestion:
         except Exception as e:
             raise NetworkSecurityException(e, sys) from e
 
+    '''
+    
+        Used to export the db data into a feature store file path. For simplicity we use a csv file.
+    
+    '''
     def export_data_into_feature_store(self,dataframe: pd.DataFrame):
         try:
             feature_store_file_path = self.data_ingestion_config.feature_store_file_path
@@ -53,6 +57,11 @@ class DataIngestion:
         except Exception as e:
             raise NetworkSecurityException(e, sys) from e
 
+    '''
+        Pulls data from mongo, saves it to a feature store and splits into train and test sets. Data outout is DataIngestionArtifact 
+        used to specify the paths of the data ingestion so that it can be used for validation and such.
+    
+    '''
     def initiate_data_ingestion(self):
         try:
             df = self.export_collection_as_dataframe()

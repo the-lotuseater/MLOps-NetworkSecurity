@@ -1,11 +1,10 @@
 from networksecurity.components.data_ingestion import DataIngestion
 from networksecurity.components.data_validation import DataValidation
-from networksecurity.entity.config_entity import DataValidationConfig
+from networksecurity.components.data_transformation import DataTransformation
+from networksecurity.entity.config_entity import DataValidationConfig, TrainingPipelineConfig, DataIngestionConfig, DataTransformationConfig
 from networksecurity.exception.exception import NetworkSecurityException
 from networksecurity.logging.logger import logging
-from networksecurity.entity.config_entity import DataIngestionConfig
 import sys
-from networksecurity.entity.config_entity import TrainingPipelineConfig
 
 if __name__ == "__main__":
     try:
@@ -14,12 +13,18 @@ if __name__ == "__main__":
         dataIngestion = DataIngestion(data_ingestion_config=dataingestionConfig)
         logging.info('Start executor')
         data_ingestion_artifact=dataIngestion.initiate_data_ingestion()
-        print('Data Ingestion completed successfully')
-        print(f'Starting Data Validation with artifact {data_ingestion_artifact}')
+        logging.info(f'Data Ingestion completed successfully {data_ingestion_artifact}')
         data_validation_config = DataValidationConfig(training_pipeline_config=trainingPipelineConfig)
         data_validation = DataValidation(data_validation_config=data_validation_config, data_ingestion_artifact=data_ingestion_artifact)
-        print('Initiating Data Validation')
-        data_validation.initiate_data_validation() 
-        print('Data Validation Completed successfully')
+        logging.info('Initiating Data Validation')
+        data_validation_artifact = data_validation.initiate_data_validation() 
+        logging.info('Data Validation Completed successfully')
+        logging.info('Initiating Data Transformation')
+        dataTransformationConfig = DataTransformationConfig(training_pipeline_config=trainingPipelineConfig)
+        data_transformation = DataTransformation(data_valiation_artifact=data_validation_artifact,
+                                 data_transformation_config=dataTransformationConfig)
+        data_transformation_artifact = data_transformation.initiate_data_transformation()
+        logging.info(f'Data Transformation completed successfully {data_transformation_artifact}')
+
     except Exception as e:
         raise NetworkSecurityException(e, sys) from e
