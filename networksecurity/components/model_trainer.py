@@ -12,6 +12,7 @@ import mlflow
 from networksecurity.utils.ml_utils.model.estimator import NetworkModel
 from networksecurity.utils.main_utils.utils import evaluate_models, save_object,load_object,load_np_array
 from networksecurity.utils.ml_utils.metric.classification_metric import get_classification_score    
+import dagshub
 
 
 class ModelTrainer:
@@ -20,6 +21,7 @@ class ModelTrainer:
         try:
             self.model_trainer_config = model_trainer_config
             self.data_transformation_artifact = data_transformation_artifact
+            dagshub.init(repo_owner='agbirhade1', repo_name='MLOps-NetworkSecurity', mlflow=True)
         except Exception as e:
             raise NetworkSecurityException(e, sys) from e
     
@@ -70,7 +72,7 @@ class ModelTrainer:
             best_model_score = model_report[best_model_name]
             y_train_pred = best_model.predict(X_train)
             train_classification_metric = get_classification_score(y_true=y_train, y_pred=y_train_pred)
-            
+
             self.track_mlflow(best_model,train_classification_metric)
 
             y_test_pred = best_model.predict(X_test)
