@@ -8,7 +8,7 @@ from networksecurity.exception.exception import NetworkSecurityException
 from networksecurity.logging.logger import logging
 from networksecurity.entity.artifact_entity import (DataTransformationArtifact,DataValidationArtifact, ModelTrainerArtifact)
 from networksecurity.entity.config_entity import ModelTrainerConfig
-
+import mlflow
 from networksecurity.utils.ml_utils.model.estimator import NetworkModel
 from networksecurity.utils.main_utils.utils import evaluate_models, save_object,load_object,load_np_array
 from networksecurity.utils.ml_utils.metric.classification_metric import get_classification_score    
@@ -22,6 +22,16 @@ class ModelTrainer:
             self.data_transformation_artifact = data_transformation_artifact
         except Exception as e:
             raise NetworkSecurityException(e, sys) from e
+    
+    def track_mlflow(self, best_model, classification_metric):
+        with mlflow.start_run():
+            f1_score = classification_metric.f1_score
+            precision_score = classification_metric.precision_score
+            recall_score = classification_metric.recall_score
+            mlflow.log_metric('f1_score', f1_score)
+            mlflow.log_metric('precision_score', precision_score)
+            mlflow.log_metric('recall_score', recall_score)
+            mlflow.sklearn.log_model(best_model, 'model')
 
     '''
         Does hyperparameter tuning, trains the model, find the best model among several and saves the best one as well.
@@ -60,6 +70,9 @@ class ModelTrainer:
             best_model_score = model_report[best_model_name]
             y_train_pred = best_model.predict(X_train)
             train_classification_metric = get_classification_score(y_true=y_train, y_pred=y_train_pred)
+            
+            self.track_mlflow(best_model,train_classification_metric)
+
             y_test_pred = best_model.predict(X_test)
             test_classification_metric = get_classification_score(y_true=y_test, y_pred=y_test_pred)
             preprocessor = load_object(file_path=self.data_transformation_artifact.transformed_object_file_path) #set the preprocessor
