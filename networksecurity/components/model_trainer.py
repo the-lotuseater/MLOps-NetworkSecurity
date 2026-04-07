@@ -87,7 +87,7 @@ class ModelTrainer:
                                                         train_metric_artifact=train_classification_metric,
                                                         test_metric_artifact=test_classification_metric)
             
-            save_object('final_model/model.pkl', preprocessor)
+            save_object('final_model/model.pkl',best_model )
             logging.info(f'Model trainer artifact: {modelTrainerArtifact}')
             return modelTrainerArtifact
 

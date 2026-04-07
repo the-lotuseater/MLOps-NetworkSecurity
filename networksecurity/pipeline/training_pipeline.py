@@ -36,7 +36,7 @@ class TrainingPipeline:
             return data_ingestion_artifact
         except Exception as e:
             logging.error(f'Error occurred while starting data ingestion: {e}')
-            raise NetworkSecurityException(e) from e
+            raise NetworkSecurityException(e,sys) from e
     
     def start_data_validation(self, data_ingestion_artifact: DataIngestionArtifact):
         try:
@@ -47,7 +47,7 @@ class TrainingPipeline:
             return data_validation_artifact
         except Exception as e:
             logging.error(f'Error occurred while starting data validation: {e}')
-            raise NetworkSecurityException(e) from e
+            raise NetworkSecurityException(e,sys) from e
     
     def start_data_transformation(self, data_validation_artifact: DataValidationArtifact):
         try:
@@ -59,19 +59,19 @@ class TrainingPipeline:
             return data_transformation_artifact
         except Exception as e:
             logging.error(f'Error occurred while starting data transformation: {e}')
-            raise NetworkSecurityException(e) from e
+            raise NetworkSecurityException(e,sys) from e
     
     def start_model_trainer(self, data_transformation_artifact: DataTransformationArtifact):
         try:
             logging.info('All the components of pipeline completed successfully..starting model training')
-            ModelTrainerConfig = ModelTrainerConfig(self.training_pipeline_config)
-            model_trainer = ModelTrainer(model_trainer_config=ModelTrainerConfig,data_transformation_artifact=data_transformation_artifact)
+            model_trainer_config = ModelTrainerConfig(self.training_pipeline_config)
+            model_trainer = ModelTrainer(model_trainer_config=model_trainer_config,data_transformation_artifact=data_transformation_artifact)
             model_trainer_artifact = model_trainer.initiate_model_trainer()
             logging.info('Model Training Artifact created')
             return model_trainer_artifact
         except Exception as e:
             logging.error(f'Error occurred while starting model trainer: {e}')
-            raise NetworkSecurityException(e) from e
+            raise NetworkSecurityException(e,sys) from e
     
     def run_pipeline(self):
         try:
@@ -82,4 +82,4 @@ class TrainingPipeline:
             return model_trainer_artifact
         except Exception as e:
             logging.error(f'Error occurred while running the training pipeline: {e}')
-            raise NetworkSecurityException(e) from e
+            raise NetworkSecurityException(e,sys) from e
