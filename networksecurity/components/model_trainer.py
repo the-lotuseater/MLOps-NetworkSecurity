@@ -86,6 +86,8 @@ class ModelTrainer:
             modelTrainerArtifact = ModelTrainerArtifact(trained_model_file_path=self.model_trainer_config.trained_model_file_path,
                                                         train_metric_artifact=train_classification_metric,
                                                         test_metric_artifact=test_classification_metric)
+            
+            save_object('final_model/model.pkl', preprocessor)
             logging.info(f'Model trainer artifact: {modelTrainerArtifact}')
             return modelTrainerArtifact
 
