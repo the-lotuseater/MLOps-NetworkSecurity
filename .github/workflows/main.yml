@@ -4,9 +4,8 @@ on:
   push: 
     branches: 
       - main
-    paths:
-      - '8-NetworkSecurity/**' # Trigger if anything in this folder changes
-      - '!8-NetworkSecurity/README.md' # Ignore README changes
+    paths-ignore:
+      - 'README.md'
 jobs:
   integration:
     name: Continuous Integration
