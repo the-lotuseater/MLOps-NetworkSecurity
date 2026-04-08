@@ -41,7 +41,7 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_NAME }}
-          IMAGE_TAG: latest
+          IMAGE_TAG: ${{ github.sha }} # Use the commit SHA
         run: |  
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
@@ -64,8 +64,11 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
 
       - name: Pull Docker image from ECR
+        IMAGE_TAG: ${{ github.sha }} # Use the commit SHA
+        env: 
+          AWS_ECR_LOGIN_URL: ${{ secrets.AWS_ECR_LOGIN_URL }}
         run: |
-          docker pull ${{ secrets.AWS_ECR_LOGIN_URL }}:latest
+          docker pull $AWS_ECR_LOGIN_URL:$IMAGE_TAG
       - name: Stop and remove existing container
         run: |
           docker stop mltest || true
@@ -77,9 +80,9 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
           AWS_ECR_LOGIN_URL: ${{ secrets.AWS_ECR_LOGIN_URL }}
-          AWS_ECR_REPOSITORY_NAME: ${{ secrets.ECR_REPOSITORY_NAME }}
+          IMAGE_TAG: ${{ github.sha }} # Use the commit SHA
         run: |
-          docker run -d -p 8080:8080 --ipc="host" --name=mltest -e "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" -e "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" -e "AWS_REGION=$AWS_REGION" $AWS_ECR_LOGIN_URL/$AWS_ECR_REPOSITORY_NAME:latest
+          docker run -d -p 8080:8080 --ipc="host" --name=mltest -e "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" -e "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" -e "AWS_REGION=$AWS_REGION" $AWS_ECR_LOGIN_URL:$IMAGE_TAG
       - name: Clean previous images and containers
         run: |
           docker system prune -f
