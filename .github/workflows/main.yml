@@ -5,7 +5,8 @@ on:
     branches: 
       - main
     paths:
-      - 8-NetworkSecurity/**
+      - '8-NetworkSecurity/**' # Trigger if anything in this folder changes
+      - '!8-NetworkSecurity/README.md' # Ignore README changes
 jobs:
   integration:
     name: Continuous Integration
