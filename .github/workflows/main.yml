@@ -6,9 +6,6 @@ on:
       - main
     paths:
       - 8-NetworkSecurity/**
-    paths-ignore:
-      - 'README.md'
-
 jobs:
   integration:
     name: Continuous Integration
