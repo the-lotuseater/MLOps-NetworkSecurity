@@ -8,7 +8,7 @@ on:
       - 'README.md'
 jobs:
   integration:
-    name: Continuous Integration
+    name: Integration
     runs-on: ubuntu-latest
     steps: 
       - name: Checkout code
@@ -46,8 +46,8 @@ jobs:
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-  Continuous-Deployment:
-    name: build-and-push-ecr-image
+  deployment:
+    name: Deployment
     needs: integration
     runs-on: self-hosted #means app runner
     steps:
@@ -65,7 +65,7 @@ jobs:
 
       - name: Pull Docker image from ECR
         run: |
-          docker pull ${{ secrets.AWS_ECR_LOGIN_URL }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
+          docker pull ${{ secrets.AWS_ECR_LOGIN_URL }}:latest
       - name: Stop and remove existing container
         run: |
           docker stop mltest || true
