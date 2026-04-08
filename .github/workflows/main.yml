@@ -65,7 +65,7 @@ jobs:
 
       - name: Pull Docker image from ECR
         env: 
-          AWS_ECR_LOGIN_URL: ${{ secrets.AWS_ECR_LOGIN_URL }}
+          AWS_ECR_LOGIN_URL: ${{ secrets.AWS_ECR_LOGIN_URI }}
           IMAGE_TAG: ${{ github.sha }} # Use the commit SHA
         run: |
           docker pull $AWS_ECR_LOGIN_URL:$IMAGE_TAG
@@ -79,7 +79,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
-          AWS_ECR_LOGIN_URL: ${{ secrets.AWS_ECR_LOGIN_URL }}
+          AWS_ECR_LOGIN_URL: ${{ secrets.AWS_ECR_LOGIN_URI }}
           IMAGE_TAG: ${{ github.sha }} # Use the commit SHA
         run: |
           docker run -d -p 8080:8080 --ipc="host" --name=mltest -e "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" -e "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" -e "AWS_REGION=$AWS_REGION" $AWS_ECR_LOGIN_URL:$IMAGE_TAG
