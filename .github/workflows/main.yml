@@ -61,6 +61,8 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
+        
+      - name: Pull Docker image from ECR
         run: |
           docker pull ${{ secrets.AWS_ECR_LOGIN_URL }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
       - name: Run Docker image to server users
@@ -69,9 +71,9 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
           AWS_ECR_LOGIN_URL: ${{ secrets.AWS_ECR_LOGIN_URL }}
-          AWS_ECR_REPOSITORY_NAME: ${{ secrets.AWS_ECR_REPOSITORY_NAME }}
+          AWS_ECR_REPOSITORY_NAME: ${{ secrets.ECR_REPOSITORY_NAME }}
         run: |
-          docker run -d -p 8080:8080 --ipc="host" --name=mltest -e 'AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID' -e 'AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY' -e 'AWS_REGION=$AWS_REGION' $AWS_ECR_LOGIN_URL/$AWS_ECR_REPOSITORY_NAME:latest
+          docker run -d -p 8080:8080 --ipc="host" --name=mltest -e "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" -e "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" -e "AWS_REGION=$AWS_REGION" $AWS_ECR_LOGIN_URL/$AWS_ECR_REPOSITORY_NAME:latest
       - name: Clean previous images and containers
         run: |
           docker system prune -f
