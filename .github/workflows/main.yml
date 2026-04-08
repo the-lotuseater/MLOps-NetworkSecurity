@@ -16,26 +16,26 @@ jobs:
       
       - name: lint code
         run: echo "Linting code..."
-  build-and-push:
-    name: Continuous Deployment
-    needs: integration
-    runs-on: ubuntu-latest
-    steps:
+
       - name: Checkout code
         uses: actions/checkout@v3
+
       - name: Install Utilities
         run: | 
           sudo apt-get update
           sudo apt-get install -y jq unzip
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
+
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
+
       - name: Build, Tag, and Push Docker Image to Amazon ECR
         id: build-Image
         env:
@@ -48,6 +48,7 @@ jobs:
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
   Continuous-Deployment:
     name: build-and-push-ecr-image
+    needs: integration
     runs-on: self-hosted #means app runner
     steps:
       - name: Checkout
@@ -61,10 +62,15 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-        
+
       - name: Pull Docker image from ECR
         run: |
           docker pull ${{ secrets.AWS_ECR_LOGIN_URL }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
+      - name: Stop and remove existing container
+        run: |
+          docker stop mltest || true
+          docker rm mltest || true
+
       - name: Run Docker image to server users
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
