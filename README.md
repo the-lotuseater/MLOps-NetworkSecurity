@@ -1,1 +1,24 @@
-Network Security MLOps PipelineTechnical Lead & ArchitectEnd-to-End MLOps Automation: Architected and deployed a production-ready MLOps pipeline that automates the full lifecycle of a network security "Sensor Model," from raw data ingestion to cloud deployment on AWS EC2.Scalable Data Ingestion: Designed a robust ETL pipeline capable of extracting data from diverse sources—including S3 buckets, local CSVs, and internal APIs—and ingesting it into a MongoDB Atlas database.Proactive Data Validation: Implemented a sophisticated data validation component that utilizes statistical drift detection to identify shifts in data distribution, ensuring model reliability over time.Feature Engineering & Transformation: Built an automated transformation layer that handles missing values via KNN Imputation, scales features with Robust Scalers, and addresses class imbalance using SMOTE (Synthetic Minority Over-sampling Technique).Automated Model Selection: Developed a "Model Factory" that trains multiple model iterations, evaluates them against a 3.8 GPA-equivalent accuracy threshold, and automatically selects the highest-performing version for production.CI/CD & Cloud Orchestration: Leveraged Docker and GitHub Actions to create a seamless CI/CD pipeline, automating the deployment of containerized models to AWS Elastic Container Registry (ECR) and App Runner.
+# Network Security MLOps Pipeline
+
+## Project Overview
+[cite_start]This project establishes a comprehensive MLOps framework designed to automate the end-to-end lifecycle of a network security **Sensor Model**[cite: 5, 320, 321]. [cite_start]The pipeline handles everything from multi-source data ingestion and statistical validation to automated model training and cloud-based deployment[cite: 14, 115, 261, 328]. [cite_start]By integrating robust feature engineering and CI/CD practices, the system ensures that the predictive model remains accurate and highly available in production environments[cite: 19, 22, 189].
+
+## Key Features
+* [cite_start]**Modular Pipeline Architecture:** Implements a component-based structure including Ingestion, Validation, Transformation, Trainer, Evaluation, and Pusher modules[cite: 59, 115, 144, 199, 261].
+* [cite_start]**Automated Data Validation:** Features built-in schema checking and statistical **Data Drift** detection to maintain model integrity against evolving network traffic patterns[cite: 144, 145, 159, 191].
+* [cite_start]**Advanced Feature Engineering:** Utilizes **KNN Imputation** for missing values, **Robust Scaling** for normalization, and **SMOTE** for addressing class imbalances[cite: 215, 228, 254, 277].
+* [cite_start]**Automated Model Factory:** Systematically evaluates multiple model configurations to select and "push" the best-performing iteration to production[cite: 301, 307, 315].
+* [cite_start]**Enterprise CI/CD:** Uses **Docker** for containerization and **GitHub Actions** for automated deployment to AWS infrastructure[cite: 22, 331, 333, 336].
+
+## Technology Stack
+* [cite_start]**Languages:** Java, JavaScript, Golang, Python (Scikit-learn, NumPy, Pandas, Flask)[cite: 8, 43, 46, 248].
+* [cite_start]**Databases:** MongoDB (Atlas), Snowflake, OracleDB, Redis, AWS S3[cite: 8, 9, 20, 89, 96].
+* [cite_start]**Infrastructure:** AWS (EC2, ECR, App Runner, CloudFormation), Azure[cite: 10, 17, 36, 335, 336, 340].
+* [cite_start]**DevOps:** Docker, Kubernetes, GitHub Actions, Git[cite: 10, 22, 41, 333].
+
+## Pipeline Workflow
+1.  [cite_start]**Ingestion:** Extracts raw data from local CSVs, S3 buckets, or APIs into MongoDB[cite: 83, 86, 89, 127].
+2.  [cite_start]**Validation:** Compares data against established schemas and generates drift reports[cite: 152, 159, 184].
+3.  [cite_start]**Transformation:** Performs cleaning, handling of missing values, and feature scaling[cite: 199, 212, 214].
+4.  [cite_start]**Training:** Executes the **Model Factory** to find the highest-performing Sensor Model[cite: 301, 307, 321].
+5.  [cite_start]**Deployment:** Containerizes the accepted model and deploys it to **AWS EC2** via a CI/CD pipeline[cite: 328, 331, 336, 339].
