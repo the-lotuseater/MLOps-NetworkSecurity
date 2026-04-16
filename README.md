@@ -11,10 +11,10 @@ This project establishes a comprehensive MLOps framework designed to automate th
 * **Enterprise CI/CD:** Uses **Docker** for containerization and **GitHub Actions** for automated deployment to AWS infrastructure.
 
 ## Technology Stack
-* **Languages:** Java, JavaScript, Golang, Python (Scikit-learn, NumPy, Pandas, Flask).
-* **Databases:** MongoDB (Atlas), Snowflake, OracleDB, Redis, AWS S3.
-* **Infrastructure:** AWS (EC2, ECR, App Runner, CloudFormation), Azure.
-* **DevOps:** Docker, Kubernetes, GitHub Actions, Git.
+* **Languages:** Golang, Python (Scikit-learn, NumPy, Pandas, Flask).
+* **Databases:** MongoDB (Atlas), AWS S3.
+* **Infrastructure:** AWS (EC2, ECR).
+* **DevOps:** Docker, GitHub Actions, Git.
 
 ## Pipeline Workflow
 1.  **Ingestion:** Extracts raw data from local CSVs, S3 buckets, or APIs into MongoDB.
